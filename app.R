@@ -165,7 +165,7 @@ server <- function(input, output) {
         Year = c("2018", "2030"),
         Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2017 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageA
                                         , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageA*2/100*input$oldtransferA
+        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageA*input$oldtransferA
                                    , digits=6 ,big.mark=",")),
         stringsAsFactors = FALSE)
     }
