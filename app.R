@@ -1,7 +1,7 @@
 library(shiny)
 library(xtable)
 
-UNpop.estimates <- read.csv("~/Dropbox/DevPath/CostingTool/UNDESA_2017PopEst.csv", header=T, sep = ",", dec=".")
+UNpop.estimates <- read.csv("UNDESA_2017PopEst.csv", header=T, sep = ",", dec=".")
 locations = unique(c(paste(UNpop.estimates$location)))
 
 ui <- fluidPage(
