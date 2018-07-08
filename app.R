@@ -10,11 +10,17 @@ ui <- fluidPage(
   br(),
   sidebarLayout(
     sidebarPanel(
+      
       selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
       br(),
+      plotOutput("plotrec"),
       br(),
-      h5("Produced by"),
-      img(src = "logo.png", height = 100, width = 200)
+      plotOutput("plottran"),
+      br(),
+      p("Developed by",
+        a("Development Pathways", 
+          href = "http://www.developmentpathways.co.uk"), 
+        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
       ),
   mainPanel(
     h2(textOutput(outputId = "name")),
@@ -79,6 +85,18 @@ server <- function(input, output) {
     paste(data[data$Country==input$country, 12])
   })
   
+  plotrecipient <- reactive({
+    c(10, 13, 3, 8, data[data$Country==input$country, 13])
+  })
+
+  plottransfers <- reactive({
+    c(0.8, 1.2, 0.3, 0.8, data[data$Country==input$country, 14])
+  })
+
+  argnames <- reactive({
+    c("World", "LAC", "AFR", "ASIA", input$country)
+  })
+  
   # Show the values in an HTML table ----
   output$name <- renderText({
     schemename()
@@ -112,6 +130,24 @@ server <- function(input, output) {
   })
   output$sources <- renderText({
     schemesources()
+  })
+  
+  output$plotrec <- renderPlot({
+    
+    # Render a barplot
+    barplot(plottransfers(), names.arg = argnames(),
+            main="Recipients Covered",
+            ylab="Percentage of persons with disabilities covered",
+            xlab="Region / country")
+  })
+  
+  output$plottran <- renderPlot({
+    
+    # Render a barplot
+    barplot(plottransfers(), names.arg = argnames(),
+            main="Value of Transfers",
+            ylab="Transfer value as % of GDP per capita",
+            xlab="Region / country")
   })
   
 }
