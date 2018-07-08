@@ -135,9 +135,9 @@ server <- function(input, output) {
   output$plotrec <- renderPlot({
     
     # Render a barplot
-    barplot(plottransfers(), names.arg = argnames(),
+    barplot(plotrecipient(), names.arg = argnames(),
             main="Recipients Covered",
-            ylab="Percentage of persons with disabilities covered",
+            ylab="Percentage of persons with disabilities covered (%)",
             xlab="Region / country")
   })
   
