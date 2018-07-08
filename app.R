@@ -94,7 +94,7 @@ server <- function(input, output) {
   })
 
   argnames <- reactive({
-    c("World", "LAC", "AFR", "ASIA", input$country)
+    c("World", "LAC", "AFR", "ASIA", abbreviate(input$country, minlength = 6, strict = T))
   })
   
   # Show the values in an HTML table ----
