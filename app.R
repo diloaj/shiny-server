@@ -1,272 +1,121 @@
 library(shiny)
 library(xtable)
+library(dplyr)
+library(readr)
 
-UNpop.estimates <- read.csv("UNDESA_2017PopEst.csv", header=T, sep = ",", dec=".")
-locations = unique(c(paste(UNpop.estimates$location)))
+data <- read.csv("~/Dropbox/DevPath/Disability/disabilitydatabase/disabilitydatabase_2014.csv", header=T, sep = ",", dec=".")
+locations = unique(c(paste(data$Country)))
+
 
 ui <- fluidPage(
-  titlePanel("Inclusive System"),
+  titlePanel("Disability Database"),
+  br(),
+  sidebarLayout(
+    sidebarPanel(
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
+      br(),
+      br(),
+      h5("Produced by"),
+      img(src = "~/Dropbox/DevPath/Disability/disabilitydatabase/logo.png", height = 100, width = 200)
+      ),
   mainPanel(
-    selectInput(inputId = "country", "Select region/country", choices=locations, selected = "Brazil")),
-  # Output: Tabset w/ plot, summary, and table ----
-  tabsetPanel(type = "tabs",
-              tabPanel("Scenario A",
-                       sidebarPanel(titlePanel("Child Benefit"),
-                                    sliderInput(inputId="childageA", "Age limits:",
-                                                min = 0, max = 18, value =c(0,17), dragRange = T
-                                    ),
-                                    sliderInput(inputId="childcoverageA", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="childtransferA", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =150
-                                    ),
-                                    tableOutput("childvaluesA"),
-                                    width = 4
-                                    
-                       ),
-                       sidebarPanel(titlePanel("Disability Benefit"),
-                                    sliderInput(inputId="disabageA", "Age limits:",
-                                                min = 0, max = 100, value =c(18,59), dragRange = T
-                                    ),
-                                    sliderInput(inputId="disabcoverageA", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="disabtransferA", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =250
-                                    ),
-                                    tableOutput("disabvaluesA"),
-                                    width = 4
-                       ),
-                       sidebarPanel(titlePanel("Old Age Benefit"),
-                                    sliderInput(inputId="oldageA", "Age limits:",
-                                                min = 50, max = 100, value =c(60,100), dragRange = T
-                                    ),
-                                    sliderInput(inputId="oldcoverageA", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="oldtransferA", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =250
-                                    ),
-                                    tableOutput("oldvaluesA"),
-                                    width = 4
-                       )
-              ),
-              tabPanel("Scenario B",
-                       sidebarPanel(titlePanel("Child Benefit"),
-                                    sliderInput(inputId="childageB", "Age limits:",
-                                                min = 0, max = 18, value =c(0,17), dragRange = T
-                                    ),
-                                    sliderInput(inputId="childcoverageB", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="childtransferB", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =150
-                                    ),
-                                    tableOutput("childvaluesB"),
-                                    width = 4
-                       ),
-                       sidebarPanel(titlePanel("Disability Benefit"),
-                                    sliderInput(inputId="disabageB", "Age limits:",
-                                                min = 0, max = 100, value =c(18,59), dragRange = T
-                                    ),
-                                    sliderInput(inputId="disabcoverageB", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="disabtransferB", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =250
-                                    ),
-                                    tableOutput("disabvaluesB"),
-                                    width = 4
-                       ),
-                       sidebarPanel(titlePanel("Old Age Benefit"),
-                                    sliderInput(inputId="oldageB", "Age limits:",
-                                                min = 50, max = 100, value =c(60,100), dragRange = T
-                                    ),
-                                    sliderInput(inputId="oldcoverageB", "Coverage (%):",
-                                                min = 0, max = 100, value =50, dragRange = T, post="%"
-                                    ),
-                                    numericInput(inputId="oldtransferB", "Monthly transfer value ($):",
-                                                 min = 0, max = 1000, value =250
-                                    ),
-                                    tableOutput("oldvaluesB"),
-                                    width = 4
-                       )
-              )
+    h2(textOutput(outputId = "name")),
+      h4("Selection Mechanism"),
+        p(textOutput(outputId = "targeting")),
+      h4("Number of recipients"),
+        p(textOutput(outputId = "recipients")),
+      h4("Value of monthly transfer (USD)"),
+        p(textOutput(outputId = "trans_usd")),
+      h4("Value of monthly transfer (local currency)"),
+        p(textOutput(outputId = "trans_lcu")),    
+      h4("Value of transfer annually (as % of GDP per capita)"),
+        p(textOutput(outputId = "trans_gdp")),
+      h4("Budget of Scheme"),
+        p(textOutput(outputId = "budget")),
+      h4("Cost of scheme (as% of GDP)"),
+        p(textOutput(outputId = "cost")),
+      h4("Mechanism for identifying Disability"),
+        p(textOutput(outputId = "mechanism")),
+      h5("Comments"),
+        p(textOutput(outputId = "comments")),
+      h5("Sources"),
+        p(textOutput(outputId = "sources"))
   )
 )
-
+)
 server <- function(input, output) {
   
   #### Scenario A
   #### Children
-  sliderChildValuesA <- reactive({
-    agemin <- input$childageA[1] + 3
-    agemax <- input$childageA[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$childcoverageA
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$childcoverageA*input$childtransferA
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$childcoverageA
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$childcoverageA*input$childtransferA
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemename <- reactive({
+    paste(data[data$Country==input$country, 2])
   })
-  
-  #### Disability
-  sliderDisabValuesA <- reactive({
-    agemin <- input$disabageA[1] + 3
-    agemax <- input$disabageA[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$disabcoverageA*2/100
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$disabcoverageA*2/100*input$disabtransferA
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$disabcoverageA*2/100
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$disabcoverageA*2/100*input$disabtransferA
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemetargeting <- reactive({
+    paste(data[data$Country==input$country, 3])
   })
-  
-  #### Old age
-  sliderOldValuesA <- reactive({
-    agemin <- input$oldageA[1] + 3
-    agemax <- input$oldageA[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2017 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$oldcoverageA
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$oldcoverageA*input$oldtransferA
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2017 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageA
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageA*input$oldtransferA
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemerecipients <- reactive({
+    paste(data[data$Country==input$country, 4])
   })
-  
-  
-  #### Scenario B
-  #### Children
-  sliderChildValuesB <- reactive({
-    agemin <- input$childageB[1] + 3
-    agemax <- input$childageB[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$childcoverageB
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$childcoverageB*input$childtransferB
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$childcoverageB
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$childcoverageB*input$childtransferB
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemetrans_usd <- reactive({
+    paste(data[data$Country==input$country, 5])
   })
-  
-  #### Disability
-  sliderDisabValuesB <- reactive({
-    agemin <- input$disabageB[1] + 3
-    agemax <- input$disabageB[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$disabcoverageB*2/100
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$disabcoverageB*2/100*input$disabtransferB
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$disabcoverageB*2/100
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$disabcoverageB*2/100*input$disabtransferB
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemetrans_lcu <- reactive({
+    paste(data[data$Country==input$country, 6])
   })
-  
-  #### Old age
-  sliderOldValuesB <- reactive({
-    agemin <- input$oldageB[1] + 3
-    agemax <- input$oldageB[2] + 3
-    if (agemin==agemax) {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(UNpop.estimates[(UNpop.estimates$year == 2017 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin]*10*input$oldcoverageB
-                                        ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country), agemin], na.rm=TRUE)*10*input$oldcoverageB*input$oldtransferB
-                                   , digits=6 ,big.mark=",")),       
-        stringsAsFactors = FALSE)
-    }
-    else {
-      data.frame(
-        Year = c("2018", "2030"),
-        Recipients= as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2017 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageB
-                                        , nsmall=0 ,big.mark=",")),
-        Cost = as.character(format(rowSums(UNpop.estimates[(UNpop.estimates$year == 2018 & UNpop.estimates$location==input$country) | (UNpop.estimates$year == 2030 & UNpop.estimates$location==input$country),c(agemin:agemax)], na.rm=TRUE)*10*input$oldcoverageB*input$oldtransferB
-                                   , digits=6 ,big.mark=",")),
-        stringsAsFactors = FALSE)
-    }
+  schemetrans_gdp <- reactive({
+    paste(data[data$Country==input$country, 7])
   })
-  
-  
-  # Show the values in an HTML table ----
-  output$childvaluesA <- renderTable({
-    sliderChildValuesA()
+  schemebudget <- reactive({
+    paste(data[data$Country==input$country, 8])
   })
-  output$disabvaluesA <- renderTable({
-    sliderDisabValuesA()
+  schemecost <- reactive({
+    paste(data[data$Country==input$country, 9])
   })
-  output$oldvaluesA <- renderTable({
-    sliderOldValuesA()
+  schememechanism <- reactive({
+    paste(data[data$Country==input$country, 10])
+  })
+  schemecomments <- reactive({
+    paste(data[data$Country==input$country, 11])
+  })
+  schemesources <- reactive({
+    paste(data[data$Country==input$country, 12])
   })
   
   # Show the values in an HTML table ----
-  output$childvaluesB <- renderTable({
-    sliderChildValuesB()
+  output$name <- renderText({
+    schemename()
   })
-  output$disabvaluesB <- renderTable({
-    sliderDisabValuesB()
+  output$targeting <- renderText({
+    schemetargeting()
   })
-  output$oldvaluesB <- renderTable({
-    sliderOldValuesB()
+  output$recipients <- renderText({
+    schemerecipients()
   })
+  output$trans_usd <- renderText({
+    schemetrans_usd()
+  })
+  output$trans_lcu <- renderText({
+    schemetrans_lcu()
+  })
+  output$trans_gdp <- renderText({
+    schemetrans_gdp()
+  })
+  output$budget <- renderText({
+    schemebudget()
+  })
+  output$cost <- renderText({
+    schemecost()
+  })
+  output$mechanism <- renderText({
+    schememechanism()
+  })
+  output$comments <- renderText({
+    schemecomments()
+  })
+  output$sources <- renderText({
+    schemesources()
+  })
+  
 }
 
 shinyApp(ui = ui, server = server)
