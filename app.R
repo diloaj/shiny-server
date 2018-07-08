@@ -3,7 +3,7 @@ library(xtable)
 library(dplyr)
 library(readr)
 
-data <- read.csv("~/Dropbox/DevPath/Disability/disabilitydatabase/disabilitydatabase_2014.csv", header=T, sep = ",", dec=".")
+data <- read.csv("disabilitydatabase_2014.csv", header=T, sep = ",", dec=".")
 locations = unique(c(paste(data$Country)))
 
 
@@ -16,7 +16,7 @@ ui <- fluidPage(
       br(),
       br(),
       h5("Produced by"),
-      img(src = "~/Dropbox/DevPath/Disability/disabilitydatabase/logo.png", height = 100, width = 200)
+      img(src = "logo.png", height = 100, width = 200)
       ),
   mainPanel(
     h2(textOutput(outputId = "name")),
