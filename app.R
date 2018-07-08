@@ -1,7 +1,5 @@
 library(shiny)
 library(xtable)
-library(dplyr)
-library(readr)
 
 data <- read.csv("disabilitydatabase_2014.csv", header=T, sep = ",", dec=".")
 locations = unique(c(paste(data$Country)))
@@ -12,7 +10,11 @@ ui <- fluidPage(
   br(),
   sidebarLayout(
     sidebarPanel(
-      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil")
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
+      br(),
+      br(),
+      h5("Produced by"),
+      img(src = "logo.png", height = 100, width = 200)
       ),
   mainPanel(
     h2(textOutput(outputId = "name")),
