@@ -15,8 +15,8 @@ ui <- fluidPage(
       selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
       br(),
       br(),
-      h5("Produced by")
-      #img(src = "logo.png", height = 100, width = 200)
+      h5("Produced by"),
+      img(src = "logo.png", height = 100, width = 200)
       ),
   mainPanel(
     h2(textOutput(outputId = "name")),
