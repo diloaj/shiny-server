@@ -20,7 +20,7 @@ ui <- fluidPage(
       p("Developed by",
         a("Development Pathways", 
           href = "http://www.developmentpathways.co.uk"), 
-        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
+        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match the numbers in the text.")
       ),
   mainPanel(
     h2(textOutput(outputId = "name")),
