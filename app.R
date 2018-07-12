@@ -6,7 +6,7 @@ locations = unique(c(paste(data$Country)))
 
 
 ui <- fluidPage(
-  titlePanel("Disability Database", style="color:rgb(51,79,127)"),
+  titlePanel(div("Disability Benefit Database", style="color:rgb(51,79,127)")),
   br(),
   sidebarLayout(
     sidebarPanel(
@@ -23,7 +23,7 @@ ui <- fluidPage(
         "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match the numbers in the text.")
       ),
   mainPanel(
-    h2(textOutput(outputId = "name")),
+    h2(textOutput(outputId = "name"), style="color:rgb(51,79,127)"),
       h4("Selection Mechanism"),
         p(textOutput(outputId = "targeting")),
       h4("Number of recipients"),
