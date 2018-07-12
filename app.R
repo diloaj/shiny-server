@@ -6,7 +6,7 @@ locations = unique(c(paste(data$Country)))
 
 
 ui <- fluidPage(
-  titlePanel("Disability Benefit Database", style="color:rgb(51,79,127); font-family:lato"),
+  titlePanel("Disability Benefit Database"),
   br(),
   sidebarLayout(
     sidebarPanel(
@@ -26,23 +26,23 @@ ui <- fluidPage(
     h2(textOutput(outputId = "name"), style="color:rgb(51,79,127)"),
       h4("Selection Mechanism"),
         p(textOutput(outputId = "targeting")),
-      h4("Number of recipients"),
+      h4("Number of recipients", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "recipients")),
-      h4("Value of monthly transfer (USD)"),
+      h4("Value of monthly transfer (USD)", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "trans_usd")),
-      h4("Value of monthly transfer (local currency)"),
+      h4("Value of monthly transfer (local currency)", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "trans_lcu")),    
-      h4("Value of transfer annually (as % of GDP per capita)"),
+      h4("Value of transfer annually (as % of GDP per capita)", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "trans_gdp")),
-      h4("Budget of Scheme"),
+      h4("Budget of Scheme", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "budget")),
-      h4("Cost of scheme (as% of GDP)"),
+      h4("Cost of scheme (as% of GDP)", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "cost")),
-      h4("Mechanism for identifying Disability"),
+      h4("Mechanism for identifying Disability", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "mechanism")),
-      h5("Comments"),
+      h5("Comments", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "comments")),
-      h5("Sources"),
+      h5("Sources", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "sources"))
   )
 )
