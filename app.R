@@ -24,7 +24,7 @@ ui <- fluidPage(
       ),
   mainPanel(
     h2(textOutput(outputId = "name"), style="color:rgb(51,79,127)"),
-      h4("Selection Mechanism"),
+      h4("Selection Mechanism", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "targeting")),
       h4("Number of recipients", style="color:rgb(51,79,127)"),
         p(textOutput(outputId = "recipients")),
