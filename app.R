@@ -6,7 +6,7 @@ locations = unique(c(paste(data$Country)))
 
 
 ui <- fluidPage(
-  titlePanel("Disability Database"),
+  titlePanel("Disability Database", style="font-family:'times'; color:rgb(51,79,127)"),
   br(),
   sidebarLayout(
     sidebarPanel(
