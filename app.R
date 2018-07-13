@@ -139,6 +139,7 @@ server <- function(input, output) {
     # Render a barplot
     barplot(plotrecipient(), names.arg = argnames(),
             main="Recipients Covered",
+            col = colorpalette,
             ylab="Percentage of persons with disabilities covered (%)",
             xlab="Region / country")
   })
