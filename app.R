@@ -97,7 +97,7 @@ server <- function(input, output) {
     c("World", "LAC", "AFR", "ASIA", abbreviate(input$country, minlength = 6, strict = T))
   })
   
-  colorpallete <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#F15D3B")
+  colorpalette <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#F15D3B")
   
   # Show the values in an HTML table ----
   output$name <- renderText({
