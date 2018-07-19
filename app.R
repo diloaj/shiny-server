@@ -1,116 +1,129 @@
 library(shiny)
 library(xtable)
 
-data <- read.csv("disabilitydatabase_2014.csv", header=T, sep = ",", dec=".")
+data <- read.csv("test_DBD", header=T, sep = ",", dec=".")
 locations = unique(c(paste(data$Country)))
 
 
 ui <- fluidPage(
-  titlePanel("Disability Benefit Database"),
+  titlePanel("Disability Database"),
   br(),
   sidebarLayout(
     sidebarPanel(
       
       selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
+      uiOutput("schemes"),
       br(),
-      plotOutput("plotrec"),
-      br(),
+      # plotOutput("plotrec"),
+      # br(),
       plotOutput("plottran"),
       br(),
       p("Developed by",
         a("Development Pathways", 
           href = "http://www.developmentpathways.co.uk"), 
-        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match the numbers in the text.")
-      ),
-  mainPanel(
-    h2(textOutput(outputId = "name"), style="color:rgb(51,79,127)"),
-      h4("Selection Mechanism", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "targeting")),
-      h4("Number of recipients", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "recipients")),
-      h4("Value of monthly transfer (USD)", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "trans_usd")),
-      h4("Value of monthly transfer (local currency)", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "trans_lcu")),    
-      h4("Value of transfer annually (as % of GDP per capita)", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "trans_gdp")),
-      h4("Budget of Scheme", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "budget")),
-      h4("Cost of scheme (as% of GDP)", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "cost")),
-      h4("Mechanism for identifying Disability", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "mechanism")),
-      h5("Comments", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "comments")),
-      h5("Sources", style="color:rgb(51,79,127)"),
-        p(textOutput(outputId = "sources"))
+        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
+    ),
+    mainPanel(
+      h2(textOutput(outputId = "scheme_name")),
+      h4("Targeting Criteria"),
+      p(textOutput(outputId = "targeting")),
+      h4("(Proxy-) Means tested?"),
+      p(textOutput(outputId = "meanstest")),
+      h4("Number of recipients"),
+      p(textOutput(outputId = "num_rec")),
+      h4("Value of monthly transfer (USD PPP)"),
+      p(textOutput(outputId = "trans_ppp")), 
+      h4("Value of monthly transfer (local currency)"),
+      p(textOutput(outputId = "trans_lcu")),    
+      h4("Value of transfer annually (as % of GDP per capita)"),
+      p(textOutput(outputId = "trans_gdp")),
+      h4("Expenditure of Scheme (LCU)"),
+      p(textOutput(outputId = "exp_lcu")),
+      h4("Expenditure of scheme: % of GDP"),
+      p(textOutput(outputId = "exp_gdp")),
+      h4("Further information"),
+      p(textOutput(outputId = "info")),
+      h5("Comments"),
+      p(textOutput(outputId = "comments"))
+    )
   )
-)
 )
 server <- function(input, output) {
   
-  #### Scenario A
-  #### Children
-  schemename <- reactive({
-    paste(data[data$Country==input$country, 2])
-  })
-  schemetargeting <- reactive({
-    paste(data[data$Country==input$country, 3])
-  })
-  schemerecipients <- reactive({
-    paste(data[data$Country==input$country, 4])
-  })
-  schemetrans_usd <- reactive({
-    paste(data[data$Country==input$country, 5])
-  })
-  schemetrans_lcu <- reactive({
-    paste(data[data$Country==input$country, 6])
-  })
-  schemetrans_gdp <- reactive({
-    paste(data[data$Country==input$country, 7])
-  })
-  schemebudget <- reactive({
-    paste(data[data$Country==input$country, 8])
-  })
-  schemecost <- reactive({
-    paste(data[data$Country==input$country, 9])
-  })
-  schememechanism <- reactive({
-    paste(data[data$Country==input$country, 10])
-  })
-  schemecomments <- reactive({
-    paste(data[data$Country==input$country, 11])
-  })
-  schemesources <- reactive({
-    paste(data[data$Country==input$country, 12])
+  
+  
+  output$schemes <- renderUI({
+    selectInput("schemename", "Select a schemme:", choices = as.character(data[data$country==input$country, 6]))
   })
   
-  plotrecipient <- reactive({
-    c(10, 13, 3, 8, data[data$Country==input$country, 13])
+  schemename <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 6])
   })
-
+  schemetargeting <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 7])
+  })
+  schememeanstest <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 8])
+  })
+  schemerecipients <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 9])
+  })
+  schemetrans_ppp <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 10])
+  })
+  schemetrans_lcu <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 11])
+  })
+  schemetrans_gdp <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 12])
+  })
+  schemebudget <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 13])
+  })
+  schemecost <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 14])
+  })
+  schememechanism <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 15])
+  })
+  schemecomments <- reactive({
+    paste(data[data$country==input$country & data$scheme_name==input$schemename, 16])
+  })
+  
+  # plotrecipient <- reactive({
+  #   c(10, 13, 3, 8, data[data$country==input$country & data$scheme_name==input$schemename, 17])
+  # })
+  
   plottransfers <- reactive({
-    c(0.8, 1.2, 0.3, 0.8, data[data$Country==input$country, 14])
+    c(data[data$country==input$country & data$scheme_name==input$schemename, 24], 
+      data[data$country==input$country & data$scheme_name==input$schemename, 25], 
+      data[data$country==input$country & data$scheme_name==input$schemename, 26], 
+      data[data$country==input$country & data$scheme_name==input$schemename, 27], 
+      data[data$country==input$country & data$scheme_name==input$schemename, 18])
   })
-
+  
   argnames <- reactive({
-    c("World", "LAC", "AFR", "ASIA", abbreviate(input$country, minlength = 6, strict = T))
+    c("Americas", "Asia", "Oceania", "Africa", abbreviate(input$country, minlength = 6, strict = T))
   })
   
   colorpalette <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#EF5D3B")
   
   # Show the values in an HTML table ----
-  output$name <- renderText({
+
+  output$scheme_name <- renderText({
     schemename()
   })
   output$targeting <- renderText({
     schemetargeting()
   })
-  output$recipients <- renderText({
+  output$meanstest <- renderText({
+    schememeanstest()
+  })
+  output$num_rec <- renderText({
     schemerecipients()
   })
-  output$trans_usd <- renderText({
-    schemetrans_usd()
+  output$trans_ppp <- renderText({
+    schemetrans_ppp()
   })
   output$trans_lcu <- renderText({
     schemetrans_lcu()
@@ -118,31 +131,27 @@ server <- function(input, output) {
   output$trans_gdp <- renderText({
     schemetrans_gdp()
   })
-  output$budget <- renderText({
+  output$exp_lcu <- renderText({
     schemebudget()
   })
-  output$cost <- renderText({
+  output$exp_gdp <- renderText({
     schemecost()
   })
-  output$mechanism <- renderText({
+  output$info <- renderText({
     schememechanism()
   })
   output$comments <- renderText({
     schemecomments()
   })
-  output$sources <- renderText({
-    schemesources()
-  })
   
   output$plotrec <- renderPlot({
     
-    # Render a barplot
-    barplot(plotrecipient(), names.arg = argnames(),
-            main="Recipients Covered",
-            col = colorpalette,
-            ylab="Percentage of persons with disabilities covered (%)",
-            xlab="Region / country")
-  })
+  #  # Render a barplot
+  #  barplot(plotrecipient(), names.arg = argnames(),
+  #          main="Recipients Covered",
+  #          ylab="Percentage of persons with disabilities covered (%)",
+  #          xlab="Region / country")
+  #})
   
   output$plottran <- renderPlot({
     
