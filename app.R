@@ -157,6 +157,7 @@ server <- function(input, output) {
   output$plottran <- renderPlot({
     
     # Render a barplot
+    par(bg=rgb(245,245,245, max = 255))
     barplot(plottransfers(), names.arg = argnames(),
             #main="Value of Transfers",
             col = colorpalette,
