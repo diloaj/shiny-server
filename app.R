@@ -6,7 +6,7 @@ locations = unique(c(paste(data$country)))
 
 
 ui <- fluidPage(
-  titlePanel("Disability Database"),
+  titlePanel("Disability Benefits Database"),
   br(),
   sidebarLayout(
     sidebarPanel(
@@ -24,13 +24,13 @@ ui <- fluidPage(
         "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
     ),
     mainPanel(
-      h2(textOutput(outputId = "scheme_name")),
+      h2(textOutput(outputId = "scheme_name"), style="color:rgb(94,36,23)"),
       h4("Targeting Criteria", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "targeting")),
       h4("(Proxy-) Means tested?", style="color:rgb(51,79,127)"),
-      p(textOutput(outputId = "meanstest"), style="color:rgb(51,79,127)"),
-      h4("Number of recipients"),
-      p(textOutput(outputId = "num_rec"), style="color:rgb(51,79,127)"),
+      p(textOutput(outputId = "meanstest")),
+      h4("Number of recipients", style="color:rgb(51,79,127)"),
+      p(textOutput(outputId = "num_rec")),
       h4("Value of monthly transfer (USD PPP)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_ppp")), 
       h4("Value of monthly transfer (local currency)", style="color:rgb(51,79,127)"),
