@@ -2,7 +2,7 @@ library(shiny)
 library(xtable)
 
 data <- read.csv("test_DBD.csv", header=T, sep = ",", dec=".")
-locations = unique(c(paste(data$Country)))
+locations = unique(c(paste(data$country)))
 
 
 ui <- fluidPage(
@@ -103,7 +103,7 @@ server <- function(input, output) {
   })
   
   argnames <- reactive({
-    c("Americas", "Asia", "Oceania", "Africa", abbreviate(input$country, minlength = 6, strict = T))
+    c("Americas", "Asia", "Oceania", "Africa", as.character(data[data$country==input$country, 3])
   })
   
   colorpalette <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#EF5D3B")
