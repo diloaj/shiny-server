@@ -16,7 +16,7 @@ ui <- fluidPage(
       br(),
       # plotOutput("plotrec"),
       # br(),
-      h4("Transfer value of programme compared to averages across regions", style="text-align:center; color:rgb(239, 93, 59)"),
+      h4("Transfer value of programme compared to regional averages", style="text-align:center; color:rgb(239, 93, 59)"),
       plotOutput("plottran"),
       br(),
       p("Developed by",
