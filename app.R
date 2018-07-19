@@ -103,8 +103,8 @@ server <- function(input, output) {
   })
   
   argnames <- reactive({
-    c("Americas", "Asia", "Ocean", "Africa", as.character(data[data$country==input$country, 3]))
-  })
+    c("Americas", "Asia", "Ocean", "Africa", as.character(data[data$country==input$country & data$scheme_name==input$schemename, 3]))
+  }) 
   
   colorpalette <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#EF5D3B")
   
