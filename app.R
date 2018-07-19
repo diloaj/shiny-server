@@ -1,7 +1,7 @@
 library(shiny)
 library(xtable)
 
-data <- read.csv("test_DBD", header=T, sep = ",", dec=".")
+data <- read.csv("test_DBD.csv", header=T, sep = ",", dec=".")
 locations = unique(c(paste(data$Country)))
 
 
@@ -144,8 +144,8 @@ server <- function(input, output) {
     schemecomments()
   })
   
-  output$plotrec <- renderPlot({
-    
+  # output$plotrec <- renderPlot({
+  #  
   #  # Render a barplot
   #  barplot(plotrecipient(), names.arg = argnames(),
   #          main="Recipients Covered",
