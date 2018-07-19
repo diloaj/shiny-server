@@ -24,7 +24,7 @@ ui <- fluidPage(
         "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
     ),
     mainPanel(
-      h2(textOutput(outputId = "scheme_name"), style="color:rgb(94,36,23)"),
+      h2(textOutput(outputId = "scheme_name"), style="color:rgb(239, 93, 59)"),
       h4("Targeting Criteria", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "targeting")),
       h4("(Proxy-) Means tested?", style="color:rgb(51,79,127)"),
