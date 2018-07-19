@@ -16,6 +16,7 @@ ui <- fluidPage(
       br(),
       # plotOutput("plotrec"),
       # br(),
+      h4("Transfer value of programme comparred to averages across regions", style="text-align:center; color:rgb(239, 93, 59)"),
       plotOutput("plottran"),
       br(),
       p("Developed by",
@@ -103,7 +104,7 @@ server <- function(input, output) {
   })
   
   argnames <- reactive({
-    c("Americas", "Asia", "Ocean", "Africa", as.character(data[data$country==input$country & data$scheme_name==input$schemename, 3]))
+    c("Americas", "Asia", "Ocean", "Africa", "Programme")
   }) 
   
   colorpalette <- c( "#9CC4E7" , "#6F30A1", "#FAB41F", "#298B9C", "#EF5D3B")
@@ -157,10 +158,11 @@ server <- function(input, output) {
     
     # Render a barplot
     barplot(plottransfers(), names.arg = argnames(),
-            main="Value of Transfers",
+            #main="Value of Transfers",
             col = colorpalette,
             ylab="Transfer value as % of GDP per capita",
-            xlab="Region / country"
+            #xlab="Region / country",
+            las = 2
            )
   })
   
