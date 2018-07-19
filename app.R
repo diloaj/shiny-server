@@ -16,13 +16,13 @@ ui <- fluidPage(
       br(),
       # plotOutput("plotrec"),
       # br(),
-      h4("Transfer value of programme comparred to averages across regions", style="text-align:center; color:rgb(239, 93, 59)"),
+      h4("Transfer value of programme compared to averages across regions", style="text-align:center; color:rgb(239, 93, 59)"),
       plotOutput("plottran"),
       br(),
       p("Developed by",
         a("Development Pathways", 
           href = "http://www.developmentpathways.co.uk"), 
-        "using Shiny by RStudio. Values in the bar plots are random and do not necessarily match that in text.")
+        "using Shiny by RStudio.")
     ),
     mainPanel(
       h2(textOutput(outputId = "scheme_name"), style="color:rgb(239, 93, 59)"),
