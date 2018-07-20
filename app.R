@@ -4,6 +4,7 @@ library(xtable)
 data <- read.csv("test_DBD.csv", header=T, sep = ",", dec=".")
 locations = unique(c(paste(data$country)))
 
+
 ui <- fluidPage(
   titlePanel("Disability Benefits Database"),
   br(),
