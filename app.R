@@ -53,7 +53,7 @@ server <- function(input, output) {
   
   
   output$schemes <- renderUI({
-    selectInput("schemename", "Select a schemme:", choices = as.character(data[data$country==input$country, 6]))
+    selectInput("schemename", "Select a scheme:", choices = as.character(data[data$country==input$country, 6]))
   })
   
   schemename <- reactive({
