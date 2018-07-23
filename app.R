@@ -44,7 +44,9 @@ ui <- fluidPage(
       h4("Further information", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "info")),
       h5("Comments", style="color:rgb(51,79,127)"),
-      p(textOutput(outputId = "comments"))
+      p(textOutput(outputId = "comments")),
+      br(),
+      p("Note: On scheme expenditure figures, where these were not available (indicated by an *) these were obtained by multiplying the number of recipients by the minimum annual transfer value.", style="font-size:75%;")
   )
 )
 server <- function(input, output) {
