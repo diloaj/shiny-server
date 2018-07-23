@@ -10,7 +10,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Argentina"),
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
       uiOutput("schemes"),
       br(),
       # plotOutput("plotrec"),
@@ -25,28 +25,29 @@ ui <- fluidPage(
     ),
     mainPanel(
       h2(textOutput(outputId = "scheme_name"), style="color:rgb(239, 93, 59)"),
-      h4("Selection Criteria", style="color:rgb(51,79,127)"),
+      h4("Selecting Criteria", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "targeting")),
       h4("Poverty-targeted?", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "meanstest")),
       h4("Number of recipients", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "num_rec")),
-      h4("Value of monthly transfer (USD Purchasing Power Parity or PPP)", style="color:rgb(51,79,127)"),
+      h4("Value of monthly transfer (Value of monthly transfer (USD Purchasing Power Parity or PPP))", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_ppp")), 
       h4("Value of monthly transfer (local currency)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_lcu")),    
       h4("Value of transfer annually (as % of GDP per capita)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_gdp")),
-      h4("Expenditure on Scheme (Local Currency)", style="color:rgb(51,79,127)"),
+      h4("Expenditure of Scheme (Local Currency)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "exp_lcu")),
-      h4("Expenditure on scheme: % of GDP", style="color:rgb(51,79,127)"),
+      h4("Expenditure of scheme: % of GDP", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "exp_gdp")),
       h4("Further information", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "info")),
       h5("Comments", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "comments")),
       br(),
-      p("Note: On scheme expenditure figures, where these were not available (indicated by an *) these were obtained by multiplying the number of recipients by the minimum annual transfer value.", style="font-size:75%;")
+      p("* Expenditure figures are based on multiplying the number of recipients by the minimum annual transfer value.", style="font-size:75%;")
+    )
   )
 )
 server <- function(input, output) {
