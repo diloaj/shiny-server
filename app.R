@@ -10,7 +10,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brazil"),
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = sample(locations,1)),
       uiOutput("schemes"),
       br(),
       # plotOutput("plotrec"),
