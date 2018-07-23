@@ -10,7 +10,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput(inputId = "country", "Select Country", choices=locations, selected = sample(locations,1)),
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = textOutput("random")),
       uiOutput("schemes"),
       br(),
       # plotOutput("plotrec"),
@@ -57,6 +57,10 @@ server <- function(input, output) {
   output$schemes <- renderUI({
     selectInput("schemename", "Select a scheme:", choices = as.character(data[data$country==input$country, 6]))
   })
+  
+  random_fun <- reactive({
+    paste(sample(locations,1))
+    })
   
   schemename <- reactive({
     paste(data[data$country==input$country & data$scheme_name==input$schemename, 6])
@@ -145,6 +149,10 @@ server <- function(input, output) {
   output$comments <- renderText({
     schemecomments()
   })
+  
+  output$random <- renderText({
+    random_fun()
+    })
   
   # output$plotrec <- renderPlot({
   #  
