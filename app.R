@@ -10,7 +10,7 @@ ui <- fluidPage(
   sidebarLayout(
     sidebarPanel(
       
-      selectInput(inputId = "country", "Select Country", choices=locations, selected = "Brasil"),
+      selectInput(inputId = "country", "Select Country", choices=locations, selected = sample(locations, 1)),
       uiOutput("schemes"),
       br(),
       # plotOutput("plotrec"),
@@ -31,7 +31,7 @@ ui <- fluidPage(
       p(textOutput(outputId = "meanstest")),
       h4("Number of recipients", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "num_rec")),
-      h4("Value of monthly transfer (Value of monthly transfer (USD Purchasing Power Parity or PPP)", style="color:rgb(51,79,127)"),
+      h4("Value of monthly transfer (USD Purchasing Power Parity or PPP)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_ppp")), 
       h4("Value of monthly transfer (local currency)", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "trans_lcu")),    
