@@ -21,9 +21,7 @@ ui <- fluidPage(
       p("Developed by",
         a("Development Pathways", 
           href = "http://www.developmentpathways.co.uk"), 
-        "using Shiny by RStudio.", style="font-size:75%;"),
-            br(),
-      p("* This figure is based on multiplying number of recipients by the minimum annual transfer value.", style="font-size:75%;")
+        "using Shiny by RStudio.", style="font-size:75%;")
     ),
     mainPanel(
       h2(textOutput(outputId = "scheme_name"), style="color:rgb(239, 93, 59)"),
@@ -47,6 +45,8 @@ ui <- fluidPage(
       p(textOutput(outputId = "info")),
       h5("Comments", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "comments"))
+      br(),
+      p("* Expenditure figures are based on multiplying the number of recipients by the minimum annual transfer value.", style="font-size:75%;")
     )
   )
 )
