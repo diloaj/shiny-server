@@ -21,7 +21,7 @@ ui <- fluidPage(
       p("Developed by",
         a("Development Pathways", 
           href = "http://www.developmentpathways.co.uk"), 
-        "using Shiny by RStudio.")
+        "using Shiny by RStudio."),
             br(),
       p("* This figure is based on multiplying number of recipients by the minimum annual transfer value.")
     ),
