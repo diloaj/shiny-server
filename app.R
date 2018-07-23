@@ -44,7 +44,7 @@ ui <- fluidPage(
       h4("Further information", style="color:rgb(51,79,127)"),
       p(textOutput(outputId = "info")),
       h5("Comments", style="color:rgb(51,79,127)"),
-      p(textOutput(outputId = "comments"))
+      p(textOutput(outputId = "comments")),
       br(),
       p("* Expenditure figures are based on multiplying the number of recipients by the minimum annual transfer value.", style="font-size:75%;")
     )
