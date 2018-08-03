@@ -101,11 +101,14 @@ server <- function(input, output) {
   # })
   
   plottransfers <- reactive({
+    if (!is.null(input$schemename)) {
     c(data[data$country==input$country & data$scheme_name==input$schemename, 24], 
       data[data$country==input$country & data$scheme_name==input$schemename, 25], 
       data[data$country==input$country & data$scheme_name==input$schemename, 26], 
       data[data$country==input$country & data$scheme_name==input$schemename, 27], 
       data[data$country==input$country & data$scheme_name==input$schemename, 18])
+      } else {
+      return()
   })
   
   argnames <- reactive({
