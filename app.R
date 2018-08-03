@@ -165,6 +165,7 @@ server <- function(input, output) {
   
   output$plottran <- renderPlot({
     
+    if (!is.null(input$schemename)) {
     # Render a barplot
     par(bg=rgb(245,245,245, max = 255))
     barplot(plottransfers(), names.arg = argnames(),
@@ -174,6 +175,9 @@ server <- function(input, output) {
             #xlab="Region / country",
             las = 2
            )
+     } else {
+      return()
+      }
   })
   
 }
